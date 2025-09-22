@@ -1,0 +1,65 @@
+.course-card {
+  display: block;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  background-color: #fff;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.rating {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.course-title {
+  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+}
+
+.card-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.card-footer {
+  text-align: right;
+  margin-top: 16px; 
+  font-size: 1.1rem; 
+}
+
+.fee-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.full-fee {
+  color: #888;
+  margin-left: 4px;
+  margin-right: 8px;
+  font-size: 1rem; /* Make the full fee slightly smaller */
+}
+
+.subsidized-fee {
+  font-weight: bold;
+  color: #4fd968; /* A greenish color to stand out */
+}
