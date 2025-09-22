@@ -1,0 +1,24 @@
+.course-list-page {
+  max-width: 500px; /* Set a max width for the content */
+  margin: 0 auto; /* Center the page content */
+  font-family: sans-serif; /* A clean, default font */
+  background-color: #f7f7f7; /* A light grey background for the page */
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  padding: 32px 24px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.page-title {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: #666;
+}
