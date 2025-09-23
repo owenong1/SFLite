@@ -1,7 +1,7 @@
 // In src/components/CourseList.tsx
 
 import { useState, useEffect } from 'react';
-import { getCourseSummaries } from '../helper/course-summary-mapper';
+import { getCourseSummaries } from '../helper/course-summary-retriever';
 import type { CourseSummary } from '../types';
 import CourseCard from './CourseCard';
 import './CourseList.css';
