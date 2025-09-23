@@ -27,18 +27,23 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
       <div className="card-footer">
         {course.subsidizedFee !== undefined ? (
-          // Case 1: Subsidized fee exists
+          /// Case 1: Subsidized fee exists. Show both fees.
           <>
-            <span className="fee-label">Full Fee: </span>
-            <span className="full-fee"><s>${course.fullFee.toFixed(2)}</s></span>
-            <span className="subsidized-fee">${course.subsidizedFee.toFixed(2)}</span>
+            <div className="fee-row">
+              <span className="fee-label">Full Fee:</span>
+              <span className="full-fee">${course.fullFee.toFixed(2)}</span>
+            </div>
+            <div className="fee-row">
+              <span className="fee-label">Subsidized Fee: </span>
+              <span className="subsidized-fee">${course.subsidizedFee.toFixed(2)}</span>
+            </div>
           </>
         ) : (
-          // Case 2: Only full fee exists
-          <>
-            <span className="fee-label">Fee: </span>
+          // Case 2: Only full fee exists.
+          <div className="fee-row">
+            <span className="fee-label">Fee:</span>
             <span className="subsidized-fee">${course.fullFee.toFixed(2)}</span>
-          </>
+          </div>
         )}
       </div>
     </Link>

@@ -11,7 +11,7 @@ export interface CourseSummary {
   upcomingRunDate: string;
 }
 
-export interface ApiResponse {
+export interface CourseSummaryApiResponse {
   grouped: {
     GroupID: {
       groups: Array<{
@@ -23,7 +23,7 @@ export interface ApiResponse {
   };
 }
 
-// This interface describes the raw course object from the API
+// Raw course object from the Courselist API
 export interface RawCourse {
   Course_Ref_No: string;
   Course_Title: string;
@@ -35,4 +35,23 @@ export interface RawCourse {
   Tol_Cost_of_Trn_Per_Trainee: number;
   Course_Start_Date_Nearest: string;
   Course_Tagging_text: string[];
+}
+
+// Detailed course data from the Course Details API
+export interface CourseDetails {
+  id: string;
+  title: string;
+  providerName: string;
+  fullFee: number;
+  subsidizedFee: number | undefined; // Seems we can calculate this with *0.3 generally
+  attendeeCount: number;
+  rating: number;
+  ratingCount: number;
+  nextCourseRun: string;
+  moreCourseRunsCount: number;
+  schemes: string[];
+  description: string; // "About This Course"
+  whatYoullLearn: string; // "What You'll Learn"
+  entryRequirement: string;
+  skills: { title: string; type: string }[];
 }

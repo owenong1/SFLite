@@ -1,7 +1,8 @@
+import type { CourseSummary, CourseSummaryApiResponse, RawCourse } from '../types.ts';
 import mockCourseData from '../mock-course-data.ts';
-import type { CourseSummary, ApiResponse, RawCourse } from '../types';
+import { getSubsidizedFee } from './subsidized-fee-calculator.ts';
 
-
+// Helper func to map raw course data from api to CourseSummary structure
 const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
   
   const formatDuration = (durationFacet: string): string => {
@@ -19,9 +20,9 @@ const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
   const fullFee = rawCourse.Tol_Cost_of_Trn_Per_Trainee || 0;
   let subsidizedFee: number | undefined = undefined;
 
-  // If the course tags include 'SFC' and there's a fee, calculate the subsidized price.
-  if (rawCourse.Course_Tagging_text?.includes('SFC')) {
-    subsidizedFee = Math.round(fullFee * 0.3 * 100) / 100;
+  // If the course tags include 'Course Fee Grant', calculate the subsidized price.
+  if (rawCourse.Course_Tagging_text?.includes('Course Fee Grant') && fullFee) {
+    subsidizedFee = getSubsidizedFee(fullFee);
   }
 
   return {
@@ -39,7 +40,7 @@ const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
 };
 
 // Simulate an API response using the mock data
-const apiResponse = mockCourseData as ApiResponse;
+const apiResponse = mockCourseData as CourseSummaryApiResponse;
 const courseGroups = apiResponse.grouped.GroupID.groups;
 const allCourseSummaries: CourseSummary[] = courseGroups.map(group => {
   const rawCourse = group.doclist.docs[0] as RawCourse; 
