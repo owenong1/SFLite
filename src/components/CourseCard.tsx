@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom'; 
 import type { CourseSummary } from '../types';
+import { Link } from 'react-router-dom'; 
+import BookmarkButton from './BookmarkButton';
 import './CourseCard.css';
+
 
 interface CourseCardProps {
   course: CourseSummary;
@@ -9,15 +11,13 @@ interface CourseCardProps {
 const CourseCard = ({ course }: CourseCardProps) => {
   return (
     <Link to={`/course/${course.id}`} className="course-card">
-      <div className="card-header">
-        <span className="provider-name">{course.providerName}</span>
-        <div className="rating">
-          <span>⭐ {course.starRating.toFixed(1)}</span>
-          <span className="rating-count">({course.ratingCount})</span>
-        </div>
-      </div>
-
+      
       <h3 className="course-title">{course.title}</h3>
+
+      <div className="card-mainline">
+        <span className="provider-name">{course.providerName}</span>
+        
+      </div>
 
       <div className="card-details">
         <span>🗓️ {course.upcomingRunDate}</span>
@@ -25,7 +25,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
         <span>💼 {course.trainingMode}</span>
       </div>
 
+      <div className="rating">
+          <span>⭐ {course.starRating.toFixed(1)}</span>
+          <span className="rating-count">({course.ratingCount})</span>
+        </div>
+
       <div className="card-footer">
+        
         {course.subsidizedFee !== undefined ? (
           /// Case 1: Subsidized fee exists. Show both fees.
           <>
@@ -41,11 +47,14 @@ const CourseCard = ({ course }: CourseCardProps) => {
         ) : (
           // Case 2: Only full fee exists.
           <div className="fee-row">
-            <span className="fee-label">Fee:</span>
+            <span className="fee-label">Fee: </span>
             <span className="subsidized-fee">${course.fullFee.toFixed(2)}</span>
           </div>
         )}
       </div>
+
+      <BookmarkButton courseId={course.id} />
+
     </Link>
   );
 };

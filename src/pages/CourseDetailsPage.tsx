@@ -2,6 +2,7 @@ import type { CourseDetails } from '../types';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCourseDetails } from '../helper/course-details-retriever';
+import BookmarkButton from '../components/BookmarkButton';
 import './CourseDetailsPage.css';
 
 const CourseDetailsPage = () => {
@@ -26,7 +27,12 @@ const CourseDetailsPage = () => {
   }
 
   if (!course) {
-    return <div className="status-message">Course not found.</div>;
+    return (
+      <div className="status-message">
+        <h2>Course not found.</h2>
+        <Link to="/">Go back to the course list</Link>
+      </div>
+    );
   }
 
   return (
@@ -34,25 +40,35 @@ const CourseDetailsPage = () => {
       <Link to="/" className="back-link">← Back to Course List</Link>
       
       <header className="details-header">
-        <h1 className="details-title">{course.title}</h1>
-        <p className="details-provider">by {course.providerName}</p>
-        <div className="header-meta">
-          <span>⭐ {course.rating} ({course.ratingCount} ratings)</span>
-          <span>•</span>
-          <span>{course.attendeeCount} Attended</span>
+        <div>
+          <h1 className="details-title">{course.title}</h1>
+          <p className="details-provider">by {course.providerName}</p>
+          <div className="header-meta">
+            <span>⭐ {course.rating} ({course.ratingCount} ratings)</span>
+            <span className="meta-divider">•</span>
+            <span>{course.attendeeCount} Attended</span>
+          </div>
+        </div>
+        <div className = "header-actions">
+          <BookmarkButton courseId={course.id} />
+          <Link to={`https://www.myskillsfuture.gov.sg/content/portal/en/training-exchange/course-directory/course-detail.html?courseReferenceNumber=${course.id}`} className="enroll-button" target="_blank" rel="noopener noreferrer">View on SkillsFuture Website</Link>
         </div>
       </header>
 
       <div className="details-grid">
+        {/* Left Column: Main Content */}
         <div className="details-main">
           <div className="detail-section">
             <h3>About This Course</h3>
+            {/* Using 'pre-wrap' to respect newlines from the API response */}
             <p style={{ whiteSpace: 'pre-wrap' }}>{course.description}</p>
           </div>
+
           <div className="detail-section">
             <h3>What You'll Learn</h3>
             <p style={{ whiteSpace: 'pre-wrap' }}>{course.whatYoullLearn}</p>
           </div>
+
           {course.entryRequirement && (
             <div className="detail-section">
               <h3>Minimum Entry Requirement</h3>
@@ -61,45 +77,56 @@ const CourseDetailsPage = () => {
           )}
         </div>
 
+        {/* Right Column: Sidebar */}
         <aside className="details-sidebar">
-          <div className="fees-section">
+          
+          {course.skills && course.skills.length > 0 && (
+          <div className="sidebar-card skills-section">
+            <strong>Skills You'll Pick Up</strong>
+            <div className="skills-tags">
+              {course.skills.map(skill => (
+                <span key={skill.title} className="skill-tag">{skill.title}</span>
+              ))}
+            </div>
+          </div>
+          )}
+
+          <div className="sidebar-card fees-section">
             {course.subsidizedFee !== undefined ? (
               <>
                 <div className="fee-item">
-                  <span className="fee-label">Full Fee</span>
+                  <span className="fee-label">Full Course Fee</span>
                   <span className="fee-value full-fee">${course.fullFee.toFixed(2)}</span>
                 </div>
                 <div className="fee-item">
-                  <span className="fee-label">After SkillsFuture Funding</span>
+                  <span className="fee-label">After Subsidies</span>
                   <span className="fee-value subsidized-fee">${course.subsidizedFee.toFixed(2)}</span>
                 </div>
               </>
             ) : (
               <div className="fee-item">
-                <span className="fee-label">Fee</span>
+                <span className="fee-label">Course Fee</span>
                 <span className="fee-value subsidized-fee">${course.fullFee.toFixed(2)}</span>
               </div>
             )}
           </div>
-          <div className="info-section">
+
+          {course.schemes && course.schemes.length > 0 && (
+          <div className="sidebar-card info-section">
             <div className="info-item">
               <strong>Next Course Run</strong>
               <div>{course.nextCourseRun}</div>
               {course.moreCourseRunsCount > 0 && (
-                <span>And {course.moreCourseRunsCount} more</span>
+                <span className="more-runs-link">And {course.moreCourseRunsCount} more</span>
               )}
             </div>
             <div className="info-item">
               <strong>Applicable Schemes</strong>
-              <div>{course.schemes.join(', ')}</div>
-            </div>
-            <div className="info-item">
-              <strong>Skills You'll Pick Up</strong>
-              <div className="skills-tags">
-                {course.skills.map(skill => <span key={skill.title} className="skill-tag">{skill.title}, </span>)}
-              </div>
+              <p className="schemes-text">{course.schemes.join(', ')}</p>
             </div>
           </div>
+          )}
+
         </aside>
       </div>
     </div>

@@ -4,18 +4,16 @@ import { useState, useEffect } from 'react';
 import { getCourseSummaries } from '../helper/course-summary-retriever';
 import type { CourseSummary } from '../types';
 import CourseCard from './CourseCard';
+import { useBookmarks } from '../context/BookmarkContext';
 import './CourseList.css';
 
 const CourseList = () => {
-  // State for the search input's value
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  // State to hold the original, complete list of all courses.
-  const [allCourses, setAllCourses] = useState<CourseSummary[]>([]);
 
-  // State to hold the courses that are currently being displayed.
-  // This list will change based on the search query.
+  const [searchQuery, setSearchQuery] = useState('');
+  const [allCourses, setAllCourses] = useState<CourseSummary[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<CourseSummary[]>([]);
+  const [showBookmarksOnly, setShowBookmarksOnly] = useState(false); // State for show bookmark toggle
+  const { bookmarkedIds } = useBookmarks();
 
   // Fetch the full dataset once when the component first mounts.
   useEffect(() => {
@@ -24,46 +22,57 @@ const CourseList = () => {
     setFilteredCourses(allCourseData); // Initially, show all courses
   }, []); 
 
-  // To run whenever the 'searchQuery' or 'allCourses' state changes.
+  // To adjust list whenever the 'searchQuery' or 'allCourses' state changes.
   useEffect(() => {
-
-    const filterCourses = () => {
-      if (!searchQuery) {
-        // If the search query is empty, show all courses.
-        setFilteredCourses(allCourses);
-        return;
-      }
-
-      // Filter the 'allCourses' list based on the query.
-      const filtered = allCourses.filter(course =>
-        // A simple, case-insensitive search on the course title.
+    let currentCourses = allCourses
+    
+    if (searchQuery) {
+      currentCourses = currentCourses.filter(course =>
         course.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredCourses(filtered);
-    };
+    }
 
-    filterCourses();
-  }, [searchQuery, allCourses]); // dependency array for this effect.
+    if (showBookmarksOnly) {
+      currentCourses = currentCourses.filter(course => 
+        bookmarkedIds.includes(course.id));
+    }
+
+    setFilteredCourses(currentCourses);
+    
+  }, [searchQuery, allCourses, showBookmarksOnly, bookmarkedIds]); 
 
   return (
     // Use a React.Fragment <> to return multiple elements at the same level.
     <>
-      {/* --- SEARCH BAR UI --- */}
-      <div className="search-bar-container">
+      {/* --- CONTROLS --- */}
+      <div className="controls-container">
         <input
           type="text"
-          placeholder="Search for a course by name..."
+          placeholder="Search for a course..."
           className="search-input"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />
+        <div className="bookmark-filter">
+          <input
+            type="checkbox"
+            id="bookmark-toggle"
+            checked={showBookmarksOnly}
+            onChange={e => setShowBookmarksOnly(e.target.checked)}
+          />
+          <label htmlFor="bookmark-toggle">Show Bookmarked Only</label>
+        </div>
       </div>
 
       {/* --- COURSE GRID --- */}
       <div className="course-list">
-        {filteredCourses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
+        {filteredCourses.length > 0 ? (
+          filteredCourses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))
+        ) : (
+          <p className="no-results-message">No courses found.</p>
+        )}
       </div>
     </>
   );
