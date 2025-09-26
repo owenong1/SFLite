@@ -16,7 +16,8 @@
 ## 📦 Installation
 1. Clone the repository:
 `git clone https://github.com/owenong1/SFLite.git`
-2. `cd <your-repo>`
+2. Switch to your desired directory:
+`cd <your-repo>`
 3. Install dependencies:
 `npm install`  
 4. Start the dev server:
