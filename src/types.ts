@@ -12,7 +12,6 @@ export interface CourseSummary {
 }
 
 export interface CourseSummaryApiResponse {
-  contents: { // Added due to CORS proxy wrapper
     grouped: {
     GroupID: {
       groups: Array<{
@@ -22,7 +21,6 @@ export interface CourseSummaryApiResponse {
       }>;
     };
   };
-  }
 }
 
 // Raw course object from the Courselist API
