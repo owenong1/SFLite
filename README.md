@@ -25,7 +25,7 @@ npm run dev
 Usually at http://localhost:5173
 
 ## 🎮 Usage
-<img width="1468" height="835" alt="Screenshot 2025-09-26 at 6 56 53 PM" src="https://github.com/user-attachments/assets/a7ef4ce1-f1e3-4ecc-ae05-0d2fa892f930" />
+<img width="1467" height="837" alt="Screenshot 2025-09-26 at 7 09 24 PM" src="https://github.com/user-attachments/assets/dee38391-0084-458b-8f40-e37c9687d418" />
 
 The Main screen of the app is the **Course List Page**, which has some bars/buttons on the top and a grid of **Course Cards** below. 
 
