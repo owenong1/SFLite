@@ -107,7 +107,7 @@ export const getCourseSummaries = async (searchQuery : string = "data analytics"
       if (!response.ok) throw new Error("Failed to fetch courses!");
       const jsonResponse = await response.json() as CourseSummaryApiResponse;
 
-      const courseGroups = jsonResponse.grouped.GroupID.groups;
+      const courseGroups = jsonResponse.contents.grouped.GroupID.groups;
       const courseSummaries: CourseSummary[] = courseGroups.map(group => {
         const rawCourse = group.doclist.docs[0] as RawCourse; 
       return mapRawCourseToSummary(rawCourse);
