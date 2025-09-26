@@ -4,7 +4,7 @@
      - On small screens, 1 column.
      - On larger screens, as many 350px columns as can fit.
   */
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px; /* The space between the cards */
   padding: 24px; /* Some space around the whole grid */
 }
