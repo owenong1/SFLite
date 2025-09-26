@@ -6,13 +6,14 @@ import './CourseCard.css';
 
 interface CourseCardProps {
   course: CourseSummary;
+  apiSearchQuery: string; 
 }
 
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({ course, apiSearchQuery }: CourseCardProps) => {
   return (
-    <Link to={`/course/${course.id}`} className="course-card">
+    <Link to={`/course/${course.id}?q=${encodeURIComponent(apiSearchQuery)}`} className="course-card">
       
-      <h3 className="course-title">{course.title}</h3>
+      <h3 className="course-title">{course.title}</h3>  
 
       <div className="card-mainline">
         <span className="provider-name">{course.providerName}</span>

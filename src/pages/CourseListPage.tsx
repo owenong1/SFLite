@@ -5,9 +5,9 @@ const CourseListPage = () => {
   return (
     <div className="course-list-page">
       <header className="page-header">
-        <h1 className="page-title">MySkillsFuture Course Catalogue</h1>
+        <h1 className="page-title">SkillsFuture Lite</h1>
         <p className="page-subtitle">
-          Displaying the first 24 courses for "Data Analytics"
+          A minimalist way to find SkillsFuture courses
         </p>
       </header>
       <main>

@@ -1,5 +1,4 @@
 import type { CourseSummary, CourseSummaryApiResponse, RawCourse } from '../types.ts';
-import mockCourseData from '../mock-course-data.ts';
 import { getSubsidizedFee } from './subsidized-fee-calculator.ts';
 
 // Helper func to map raw course data from api to CourseSummary structure
@@ -39,19 +38,110 @@ const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
   };
 };
 
+// Constructs the correct url for the api call
+function getAPIURL(searchTerm: string, start: number = 0): string {
+  const baseUrl = "/api/services/tex/individual/course-search";
+
+  const params = new URLSearchParams();
+  params.set("rows", '24');
+  params.set("facet", "true");
+  params.set("facet.mincount", "1");
+  params.set("json.nl", "map");
+
+  // ✅ Append multiple facet.field values
+  const facets = [
+    "{!ex=TP_ALIAS_Suggest}TP_ALIAS_Suggest",
+    "{!ex=Wheelchair_Access}Wheelchair_Access",
+    "{!ex=Area_of_Training}Area_of_Training",
+    "{!ex=Area_of_Training}Area_of_Training_facet",
+    "{!ex=Mode_of_Training}Mode_of_Training",
+    "{!ex=Mode_of_Training}Mode_of_Training_facet",
+    "{!ex=Medium_of_Instruction}Medium_of_Instruction",
+    "{!ex=Medium_of_Instruction}Medium_of_Instruction_facet",
+    "{!ex=Minimum_Education_Req}Minimum_Education_Req",
+    "{!ex=Minimum_Education_Req}Minimum_Education_Req_facet",
+    "{!ex=Course_Funding}Course_Funding",
+    "{!ex=Course_Funding}Course_Funding_facet",
+    "{!ex=Course_Quality_Stars_Rating_Search}Course_Quality_Stars_Rating_Search",
+    "{!ex=Course_Quality_Stars_Rating_Search}Course_Quality_Stars_Rating_facet",
+    "{!ex=Len_of_Course_Duration_Search}Len_of_Course_Duration_Search",
+    "{!ex=Len_of_Course_Duration_Search}Len_of_Course_Duration_facet",
+    "{!ex=Tags_text_Filtered}Tags_text_Filtered",
+    "{!ex=Tags_text_FeaturedInitiatives}Tags_text_FeaturedInitiatives",
+    "{!ex=Tags_text_SFInitiatives}Tags_text_SFInitiatives"
+  ];
+  facets.forEach(f => params.append("facet.field", f));
+
+  params.append("fq", "IsValid:true");
+  params.append("fq", `Course_Supp_Period_To_1:[${new Date().toISOString()} TO *]`);
+  params.set("q", searchTerm);
+  params.set("start", start.toString());
+  params.set("refresh", Date.now().toString());
+
+  const fullUrl = `${baseUrl}?query=${encodeURIComponent(params.toString())}&jumpstart=true&client_id=f840437b-c974-40d4-a469-574f6630efa2`;
+
+  return fullUrl;
+}
+
+/**
+ * Fetches list of courses for a search query using the API.
+ * @param searchQuery The query to search given in the search bar
+ * @param start The row of data to retrieve (API sends max 24 courses at a time)
+ * @returns Cleaned and structured course details.
+ */
+export const getCourseSummaries = async (searchQuery : string = "data analytics", n : number = 48): Promise<CourseSummary[]> => {
+  // Construct the API URL using proxy.
+  const apiURLs : string[] = [];
+  for (let start = 0; start < n; start += 24) {
+    apiURLs.push( getAPIURL(searchQuery, start));
+    console.log(getAPIURL(searchQuery, start))
+  }
+
+  try {
+    const allCourseSummaries : CourseSummary[] = [];
+
+    for (const apiURL of apiURLs) {
+
+      const response = await fetch(apiURL);
+      if (!response.ok) throw new Error("Failed to fetch courses!");
+      const jsonResponse = await response.json() as CourseSummaryApiResponse;
+
+      const courseGroups = jsonResponse.grouped.GroupID.groups;
+      const courseSummaries: CourseSummary[] = courseGroups.map(group => {
+        const rawCourse = group.doclist.docs[0] as RawCourse; 
+      return mapRawCourseToSummary(rawCourse);
+      });
+      allCourseSummaries.push(...courseSummaries);
+    }
+
+    return allCourseSummaries
+
+  } catch (error) {
+    console.error("Failed to get course details:", error);
+    return [];
+  }
+
+}
+
+/* Obsolete due to new implementation
+
+import mockCourseData from '../mock-course-data.ts';
+
 // Simulate an API response using the mock data
-const apiResponse = mockCourseData as CourseSummaryApiResponse;
-const courseGroups = apiResponse.grouped.GroupID.groups;
-const allCourseSummaries: CourseSummary[] = courseGroups.map(group => {
+const apiMockResponse = mockCourseData as CourseSummaryApiResponse;
+const courseGroups = apiMockResponse.grouped.GroupID.groups;
+const allMockCourseSummaries: CourseSummary[] = courseGroups.map(group => {
   const rawCourse = group.doclist.docs[0] as RawCourse; 
   return mapRawCourseToSummary(rawCourse);
 });
 
 // Return all course summaries based on the mock data
-export const getCourseSummaries = (): CourseSummary[] => {
-  return allCourseSummaries;
+export const getMockCourseSummaries = (): CourseSummary[] => {
+  return allMockCourseSummaries;
 };
 
-export const getCourseById = (id: string): CourseSummary | undefined => {
-  return allCourseSummaries.find(course => course.id === id);
+export const getMockCourseById = (id: string): CourseSummary | undefined => {
+  return allMockCourseSummaries.find(course => course.id === id);
 };
+
+*/
