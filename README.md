@@ -35,7 +35,7 @@ Clicking on any of the **Course Cards** takes you to the **Course Details** page
 
 Do note:
 - The App comes preloaded with mock data that it defaults to if search is unavailable, or if a blank string is searched.
-- Currently the non-local website version does not support live search 
+- A non-local website version is available at https://sf-app-khaki.vercel.app. However, do note that it does not support live search at the moment.
 
 ### How to use:
 - Course List: Scroll as you please to browse courses!
