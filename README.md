@@ -26,7 +26,7 @@
 Usually at http://localhost:5173
 
 ## 🎮 Usage
-<img width="1467" height="837" alt="Screenshot 2025-09-26 at 7 09 24 PM" src="https://github.com/user-attachments/assets/dee38391-0084-458b-8f40-e37c9687d418" />
+<img width="1470" height="836" alt="Screenshot 2025-09-26 at 10 54 26 PM" src="https://github.com/user-attachments/assets/c7aa9371-644b-4967-b631-157fd6b5fd11" />
 
 The Main screen of the app is the **Course List Page**, which has some bars/buttons on the top and a grid of **Course Cards** below. 
 
@@ -68,3 +68,6 @@ Lacking real user data, some assumptions had to be made, but it is assumed that 
 
 Visuals-wise, I debated whether using emojis would fit the minimalist aesthetic or not, but decided to go with them as it seemed easier to visually parse the information, and they provided a small touch of visual interest lacking which the site might appear too plain. The decision to implement the bookmark feature also arose because I wanted there to be something breaking the monotony of the act of browsing. Through experimentation, I found that using a light happy red and a filled up heart emoji for a successful bookmark in contrast with the starker white background provided a light sense of satisfaction, akin to a tiny minigame.
 
+Something to be fine-tuned is the size of the course cards, based on a normal laptop browser. Whether to have 2,3 or even more columns of cards was a difficult decision. Ultimately I went with 2 columns as it looked cleaner and fit with the minimalist aethetic. That said, I do see merit in the greater visual interest and content density of 4 columns:
+
+<img width="1469" height="829" alt="Screenshot 2025-09-26 at 10 57 01 PM" src="https://github.com/user-attachments/assets/7bb753f2-e76a-431a-a7a2-ffd98bfdf480" />
