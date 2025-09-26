@@ -1,4 +1,5 @@
 import type { CourseDetails } from '../types'; 
+import wrapProxy from './proxy-wrapper';
 import { getSubsidizedFee } from './subsidized-fee-calculator';
 
 /**
@@ -8,7 +9,7 @@ import { getSubsidizedFee } from './subsidized-fee-calculator';
  */
 export const getCourseDetails = async (courseId: string): Promise<CourseDetails | null> => {
   // Construct the API URL using proxy.
-  const apiUrl = `https://www.myskillsfuture.gov.sg/services/tex/individual/course-detail?action=get-course-by-ref-number&refNumber=${courseId}`;
+  const apiUrl = wrapProxy(`https://www.myskillsfuture.gov.sg/api/services/tex/individual/course-detail?action=get-course-by-ref-number&refNumber=${courseId}`);
 
   try {
     const response = await fetch(apiUrl);
