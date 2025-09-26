@@ -40,7 +40,7 @@ const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
 
 // Constructs the correct url for the api call
 function getAPIURL(searchTerm: string, start: number = 0): string {
-  const baseUrl = "/api/services/tex/individual/course-search";
+  const baseUrl = "https://www.myskillsfuture.gov.sg/services/tex/individual/course-search";
 
   const params = new URLSearchParams();
   params.set("rows", '24');
