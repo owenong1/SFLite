@@ -8,7 +8,7 @@ import { getSubsidizedFee } from './subsidized-fee-calculator';
  */
 export const getCourseDetails = async (courseId: string): Promise<CourseDetails | null> => {
   // Construct the API URL using proxy.
-  const apiUrl = `/api/services/tex/individual/course-detail?action=get-course-by-ref-number&refNumber=${courseId}`;
+  const apiUrl = `https://www.myskillsfuture.gov.sg/services/tex/individual/course-detail?action=get-course-by-ref-number&refNumber=${courseId}`;
 
   try {
     const response = await fetch(apiUrl);
