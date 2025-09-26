@@ -9,6 +9,38 @@
   padding: 24px; /* Some space around the whole grid */
 }
 
+.api-search-container {
+  display: flex;
+  gap: 10px;
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.api-search-input {
+  flex-grow: 1;
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.api-search-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.api-search-button:hover {
+  background-color: #0056b3;
+}
+
 .controls-container {
   display: flex;
   flex-wrap: wrap;
@@ -45,5 +77,14 @@
   grid-column: 1 / -1; /* Make the message span all columns */
 }
 
-/* ... (the .course-list grid styles remain the same) ... */
+.status-message {
+  padding: 48px;
+  text-align: center;
+  color: #666;
+  grid-column: 1 / -1;
+}
 
+.status-message.error-message {
+  color: #d9534f;
+  font-weight: bold;
+}

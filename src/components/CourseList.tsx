@@ -1,34 +1,53 @@
-// In src/components/CourseList.tsx
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getCourseSummaries } from '../helper/course-summary-retriever';
 import type { CourseSummary } from '../types';
 import CourseCard from './CourseCard';
 import { useBookmarks } from '../context/BookmarkContext';
 import './CourseList.css';
 
-const CourseList = () => {
+const COURSES_PER_CALL = 24 * 2 // API calls in multiples of 24
 
-  const [searchQuery, setSearchQuery] = useState('');
+const CourseList = () => {
+  const [searchParams, setSearchParams] = useSearchParams(); // The term in the url query param 'q'
+  const initialQuery = searchParams.get('q') || 'data analytics';
+  const [apiSearchQuery, setApiSearchQuery] = useState('') // The term sent for query to the api
+  const [searchBarInput, setSearchBarInput] = useState(initialQuery) // The term in the search bar
+  const [filterQuery, setFilterQuery] = useState('');
   const [allCourses, setAllCourses] = useState<CourseSummary[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<CourseSummary[]>([]);
+  const [displayedCourses, setDisplayedCourses] = useState<CourseSummary[]>([]);
   const [showBookmarksOnly, setShowBookmarksOnly] = useState(false); // State for show bookmark toggle
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { bookmarkedIds } = useBookmarks();
 
-  // Fetch the full dataset once when the component first mounts.
+  // Fetch course data when search query changes
+  const fetchCourses = useCallback(async () => {
+    setIsLoading(true)  
+    setError(null)
+    try {
+      const data = await getCourseSummaries(apiSearchQuery, COURSES_PER_CALL)
+      setAllCourses(data)
+    } catch(error) {
+      console.error("Failed to fetch courses from SkillsFuture API", error)
+      setError("Failed to load courses from API.")
+      setAllCourses([])
+    } finally {
+      setIsLoading(false)
+    }
+  }, [apiSearchQuery])
+  
   useEffect(() => {
-    const allCourseData = getCourseSummaries();
-    setAllCourses(allCourseData);
-    setFilteredCourses(allCourseData); // Initially, show all courses
-  }, []); 
+    fetchCourses()
+  }, [fetchCourses])
 
-  // To adjust list whenever the 'searchQuery' or 'allCourses' state changes.
+  // To adjust list whenever the 'filterQuery' or 'allCourses' state changes.
   useEffect(() => {
     let currentCourses = allCourses
     
-    if (searchQuery) {
+    if (filterQuery) {
       currentCourses = currentCourses.filter(course =>
-        course.title.toLowerCase().includes(searchQuery.toLowerCase())
+        course.title.toLowerCase().includes(filterQuery.toLowerCase())
       );
     }
 
@@ -36,22 +55,48 @@ const CourseList = () => {
       currentCourses = currentCourses.filter(course => 
         bookmarkedIds.includes(course.id));
     }
-
-    setFilteredCourses(currentCourses);
     
-  }, [searchQuery, allCourses, showBookmarksOnly, bookmarkedIds]); 
+    setDisplayedCourses(currentCourses);
+    
+  }, [filterQuery, allCourses, showBookmarksOnly, bookmarkedIds]); 
+
+
+  // Support updating via url query param
+  useEffect(() => {
+  const query = searchParams.get('q') || '';
+  setSearchBarInput(query);  // update the input box
+  setApiSearchQuery(query);     // trigger API fetch
+  }, [searchParams]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent page reload
+    setApiSearchQuery(searchBarInput); // Update the term that triggers the API fetch
+    setSearchParams({ q: searchBarInput });
+  };
+
 
   return (
     // Use a React.Fragment <> to return multiple elements at the same level.
     <>
       {/* --- CONTROLS --- */}
+      <form onSubmit={handleSearchSubmit} className="api-search-container">
+        <input
+          type="text"
+          placeholder="Search SkillsFuture for new courses..."
+          className="api-search-input"
+          value={searchBarInput}
+          onChange={e => setSearchBarInput(e.target.value)}
+        />
+        <button type="submit" className="api-search-button">Search API</button>
+      </form>
+
       <div className="controls-container">
         <input
           type="text"
-          placeholder="Search for a course..."
+          placeholder="Filter these courses..."
           className="search-input"
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          value={filterQuery}
+          onChange={e => setFilterQuery(e.target.value)}
         />
         <div className="bookmark-filter">
           <input
@@ -66,12 +111,16 @@ const CourseList = () => {
 
       {/* --- COURSE GRID --- */}
       <div className="course-list">
-        {filteredCourses.length > 0 ? (
-          filteredCourses.map(course => (
-            <CourseCard key={course.id} course={course} />
+        {isLoading ? (
+          <p className="status-message">Loading courses from API...</p>
+        ) : error ? (
+          <p className="status-message error-message">{error}</p>
+        ) : displayedCourses.length > 0 ? (
+          displayedCourses.map(course => (
+            <CourseCard key={course.id} course={course} apiSearchQuery={searchParams.get('q') ?? ''}/>
           ))
         ) : (
-          <p className="no-results-message">No courses found.</p>
+          <p className="status-message">No courses found for: "{apiSearchQuery}" </p>
         )}
       </div>
     </>

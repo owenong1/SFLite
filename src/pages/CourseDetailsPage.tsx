@@ -7,6 +7,7 @@ import './CourseDetailsPage.css';
 
 const CourseDetailsPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
+  const searchQuery = new URLSearchParams(location.search).get('q') || '';
   const [course, setCourse] = useState<CourseDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +38,7 @@ const CourseDetailsPage = () => {
 
   return (
     <div className="course-details-page">
-      <Link to="/" className="back-link">← Back to Course List</Link>
+      <Link to={`/?q=${encodeURIComponent(searchQuery)}`} className="back-link">← Back to Course List</Link>
       
       <header className="details-header">
         <div>
