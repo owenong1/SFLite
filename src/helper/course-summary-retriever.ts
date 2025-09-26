@@ -1,5 +1,4 @@
 import type { CourseSummary, CourseSummaryApiResponse, RawCourse } from '../types.ts';
-import wrapProxy from './proxy-wrapper.ts';
 import { getSubsidizedFee } from './subsidized-fee-calculator.ts';
 
 // Helper func to map raw course data from api to CourseSummary structure
@@ -41,7 +40,7 @@ const mapRawCourseToSummary = (rawCourse: RawCourse): CourseSummary => {
 
 // Constructs the correct url for the api call
 function getAPIURL(searchTerm: string, start: number = 0): string {
-  const baseUrl = "https://www.myskillsfuture.gov.sg/services/tex/individual/course-search";
+  const baseUrl = "/api/services/tex/individual/course-search";
 
   const params = new URLSearchParams();
   params.set("rows", '24');
@@ -81,7 +80,7 @@ function getAPIURL(searchTerm: string, start: number = 0): string {
 
   const fullUrl = `${baseUrl}?query=${encodeURIComponent(params.toString())}&jumpstart=true&client_id=f840437b-c974-40d4-a469-574f6630efa2`;
 
-  return wrapProxy(fullUrl);
+  return fullUrl;
 }
 
 /**
