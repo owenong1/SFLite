@@ -16,12 +16,12 @@
 ## 📦 Installation
 1. Clone the repository:
 git clone https://github.com/owenong1/SFLite.git
-cd `<your-repo>`
-2. Install dependencies:
+2. cd `<your-repo>`
+3. Install dependencies:
 npm install   
-3. Start the dev server:
+4. Start the dev server:
 npm run dev   
-4. Open in browser:
+5. Open in browser:
 Usually at http://localhost:5173
 
 ## 🎮 Usage
