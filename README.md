@@ -25,10 +25,17 @@ npm run dev
 Usually at http://localhost:5173
 
 ## 🎮 Usage
-The Main screen of the app is the **Course List Page**, which has some bars/buttons on the top and a grid of **Course Cards** below. Clicking on any of the **Course Cards** takes you to the **Course Details** page for that course.
+<img width="1467" height="837" alt="Screenshot 2025-09-26 at 7 09 24 PM" src="https://github.com/user-attachments/assets/dee38391-0084-458b-8f40-e37c9687d418" />
+
+The Main screen of the app is the **Course List Page**, which has some bars/buttons on the top and a grid of **Course Cards** below. 
+
+Clicking on any of the **Course Cards** takes you to the **Course Details** page for that course:
+
+<img width="1039" height="787" alt="Screenshot 2025-09-26 at 6 58 01 PM" src="https://github.com/user-attachments/assets/ea9480ff-6d80-4682-be28-e3cae6d2f65f" />
+
 Do note:
 - The App comes preloaded with mock data that it defaults to if search is unavailable, or if a blank string is searched.
-- Currently the non-local website version does not support live search 
+- A non-local website version is available at https://sf-app-khaki.vercel.app. However, do note that it does not support live search at the moment.
 
 ### How to use:
 - Course List: Scroll as you please to browse courses!
