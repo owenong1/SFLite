@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getCourseSummaries } from '../helper/course-summary-retriever';
+import { getCourseSummaries, getMockCourseSummaries } from '../helper/course-summary-retriever';
 import type { CourseSummary } from '../types';
 import CourseCard from './CourseCard';
 import { useBookmarks } from '../context/BookmarkContext';
@@ -10,7 +10,7 @@ const COURSES_PER_CALL = 24 * 2 // API calls in multiples of 24
 
 const CourseList = () => {
   const [searchParams, setSearchParams] = useSearchParams(); // The term in the url query param 'q'
-  const initialQuery = searchParams.get('q') || 'data analytics';
+  const initialQuery = searchParams.get('q') || 'Data Analytics';
   const [apiSearchQuery, setApiSearchQuery] = useState('') // The term sent for query to the api
   const [searchBarInput, setSearchBarInput] = useState(initialQuery) // The term in the search bar
   const [filterQuery, setFilterQuery] = useState('');
@@ -23,10 +23,11 @@ const CourseList = () => {
 
   // Fetch course data when search query changes
   const fetchCourses = useCallback(async () => {
+    console.log("Fetching courses for query:", apiSearchQuery)
     setIsLoading(true)  
     setError(null)
     try {
-      const data = await getCourseSummaries(apiSearchQuery, COURSES_PER_CALL)
+      const data = await getCourseSummaries(apiSearchQuery, COURSES_PER_CALL) 
       setAllCourses(data)
     } catch(error) {
       console.error("Failed to fetch courses from SkillsFuture API", error)
@@ -38,7 +39,11 @@ const CourseList = () => {
   }, [apiSearchQuery])
   
   useEffect(() => {
-    fetchCourses()
+    if (apiSearchQuery.trim() !== '') {
+    fetchCourses();
+    } else {
+      setAllCourses(getMockCourseSummaries()); 
+    }
   }, [fetchCourses])
 
   // To adjust list whenever the 'filterQuery' or 'allCourses' state changes.
@@ -60,7 +65,6 @@ const CourseList = () => {
     
   }, [filterQuery, allCourses, showBookmarksOnly, bookmarkedIds]); 
 
-
   // Support updating via url query param
   useEffect(() => {
   const query = searchParams.get('q') || '';
@@ -74,7 +78,6 @@ const CourseList = () => {
     setSearchParams({ q: searchBarInput });
   };
 
-
   return (
     // Use a React.Fragment <> to return multiple elements at the same level.
     <>
@@ -87,7 +90,7 @@ const CourseList = () => {
           value={searchBarInput}
           onChange={e => setSearchBarInput(e.target.value)}
         />
-        <button type="submit" className="api-search-button">Search API</button>
+        <button type="submit" className="api-search-button">Search</button>
       </form>
 
       <div className="controls-container">

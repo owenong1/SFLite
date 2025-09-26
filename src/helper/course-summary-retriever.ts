@@ -1,4 +1,5 @@
 import type { CourseSummary, CourseSummaryApiResponse, RawCourse } from '../types.ts';
+import mockCourseData from '../mock-course-data.ts';
 import { getSubsidizedFee } from './subsidized-fee-calculator.ts';
 
 // Helper func to map raw course data from api to CourseSummary structure
@@ -94,7 +95,6 @@ export const getCourseSummaries = async (searchQuery : string = "data analytics"
   const apiURLs : string[] = [];
   for (let start = 0; start < n; start += 24) {
     apiURLs.push( getAPIURL(searchQuery, start));
-    console.log(getAPIURL(searchQuery, start))
   }
 
   try {
@@ -120,12 +120,7 @@ export const getCourseSummaries = async (searchQuery : string = "data analytics"
     console.error("Failed to get course details:", error);
     return [];
   }
-
 }
-
-/* Obsolete due to new implementation
-
-import mockCourseData from '../mock-course-data.ts';
 
 // Simulate an API response using the mock data
 const apiMockResponse = mockCourseData as CourseSummaryApiResponse;
@@ -144,4 +139,3 @@ export const getMockCourseById = (id: string): CourseSummary | undefined => {
   return allMockCourseSummaries.find(course => course.id === id);
 };
 
-*/

@@ -1,69 +1,42 @@
-# React + TypeScript + Vite
+# SkillsFuture Lite
+## SkillsFuture Lite is a minimalist course-search app built with Vite. It helps users quickly find, filter and bookmark SkillsFuture courses without any excess. 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
+- 🔍 Search for courses just like on the SkillsFuture website
+- 🗂️ Filter the list by matching text
+- ⭐ Bookmark favorite courses for later viewing
+- 📅 View all relevant details in the app itself
+- 📱 Embedded links with direct access to the SkillsFuture course details website
 
-Currently, two official plugins are available:
+## 🛠️ Tech Stack
+- **Framework:** Vite + React 
+- **Language:** TypeScript
+- **Styling:** CSS 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📦 Installation
+1. Clone the repository:
+git clone https://github.com/owenong1/SFLite.git
+cd <your-repo>
+2. Install dependencies:
+npm install   
+3. Start the dev server:
+npm run dev   
+4. Open in browser:
+Usually at http://localhost:5173
 
-## Expanding the ESLint configuration
+## 🎮 Usage
+The Main screen of the app is the **Course List Page**, which has some bars/buttons on the top and a grid of **Course Cards** below. Clicking on any of the **Course Cards** takes you to the **Course Details** page for that course.
+Do note:
+- The App comes preloaded with mock data that it defaults to if search is unavailable, or if a blank string is searched.
+- Currently the non-local website version does not support live search 
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### How to use:
+- Course List: Scroll as you please to browse courses!
+- Top search bar: Type a keyword and click the blue 'Search' button to search for SkillsFuture courses.
+- Lower filter bar, type any string you want to filter the currently shown courses by (e.g., 'Introduction', 'Advanced').
+- "Show bookmarked only" button: Click to additionally filter the shown list by those you have bookmarked
+Click a course to view its details
+- Bookmark buttons: Click to save the course to your bookmarked courses
+- Course Card: Click to be taken to the Course Details page for that course
+- Course Details: View in-depth details of your chosen course. You may click on the button in the top right to be taken directly to the SkillsFuture website for that course too.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
